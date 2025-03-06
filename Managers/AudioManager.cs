@@ -9,7 +9,7 @@ public class AudioManager : Singleton<AudioManager>
     private AudioSource bgmSource;
     private List<AudioSource> sfxSources = new List<AudioSource>();
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
-    [SerializeField] private float bgmVolume = 0.5f;
+    [SerializeField] private float bgmVolume = 0.4f;
     [SerializeField] private float sfxVolume = 1.0f;
     private const int MAX_SFX_SOURCES = 5;
     public void InitAudioSources()
@@ -113,7 +113,7 @@ public class AudioManager : Singleton<AudioManager>
 
     public void SetSFXVolume(float volume)
     {
-        sfxVolume = Mathf.Clamp01(volume);
+        sfxVolume = Mathf.Clamp(volume, 0f, 2.0f);
         foreach (var source in sfxSources)
         {
             source.volume = sfxVolume;

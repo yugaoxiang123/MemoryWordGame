@@ -9,6 +9,7 @@ public static class GameConstants
         public const string SHOW_WORD = "SHOW_WORD";
 
         public const string SHOW_WORD_LIST_PANEL = "SHOW_WORD_LIST_PANEL";
+        public const string SHOW_BGM_PANEL = "SHOW_BGM_LIST_PANEL";
     }
 
     // ¥Êµµœ‡πÿ
@@ -27,5 +28,19 @@ public static class GameConstants
 
         public const string WORD_LIST_BUTTON = "Prefabs/WordListButton";
         public const string WORD_LIST_PANEL = "Prefabs/WordListPanel";
+        
+        public const string BGM_LIST_BUTTON = "Prefabs/BgmButtonPrefab";
+        public const string BGM_LIST_PANEL = "Prefabs/BgmListPanel";
+        public const string BGM_OPTION_BUTTON = "Prefabs/BgmOptionButton";
+
+        public const string FRAME = "Prefabs/Frame";
+    }
+
+    public static class AudioPaths
+    {
+        public const string BGM1 = "Audios/BGM1";
+        public const string BGM2 = "Audios/BGM2";
+        public const string BGM3 = "Audios/BGM3";
+        public const string BGM4 = "Audios/BGM4";
     }
 }

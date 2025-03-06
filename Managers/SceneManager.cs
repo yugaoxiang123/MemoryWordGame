@@ -54,7 +54,7 @@ public class SceneManager : Singleton<SceneManager>
         //asyncLoad.allowSceneActivation = true;
 
         // 关闭加载界面
-        UIManager.Instance.ClosePanel("UI/LoadingPanel");
+        UIManager.Instance.ClosePanel(GameConstants.UIPaths.LOADING_PANEL);
 
         isLoading = false;
         onComplete?.Invoke();

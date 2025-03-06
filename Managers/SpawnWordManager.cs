@@ -1,28 +1,27 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SpawnWordManager : Singleton<SpawnWordManager>
 {
-    private List<string> wordList = new List<string>();  // 存储单词列表
+    internal List<string> wordList = new List<string>();  // 存储单词列表
     private Dictionary<string, string> wordDict;  // 存储单词和对应的意思
-    private int currentIndex = 0;  // 记录当前显示的单词索引
+    internal int currentIndex = 0;  // 记录当前显示的单词索引
 
     private Queue<GameObject> wordQueue=new Queue<GameObject>();
-    private int MaxShowWordCount=17;
+    private int MaxShowWordCount=12;
 
-    private Vector2 weight = new Vector2(-300, 300);
-    private Vector2 height = new Vector2(-230, 420);
+    private Vector2 weight = new Vector2(-380, 380);
+    private Vector2 height = new Vector2(-270, 580);
 
     private const string audioClipFileName = "Data/WordAudio/{0}";
     private float IntervalTime = 0.8f;
     string prefabPath = "Prefabs/WordPrefab";
 
     private Vector2 touchStartPos;
+    internal bool isTouchValid = false; // 新增标记，判断触摸是否有效
     IEnumerator var_fade_word = null;
     //private Coroutine var_fade_word;  // 确保这是一个 Coroutine 类型的变量
     public void InitSpawnWord()
@@ -42,6 +41,8 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
 
     void Update()
     {
+        if (GameManager.Instance.var_IsGamePaused) { return; }
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -50,8 +51,9 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
             if (touch.phase == TouchPhase.Began)
             {
                 touchStartPos = touch.position;
+                isTouchValid = true; // 触摸在游戏运行时开始，标记为有效
             }
-            else if (touch.phase == TouchPhase.Ended)
+            else if (touch.phase == TouchPhase.Ended && isTouchValid)
             {
                 float swipeDistance = touch.position.y - touchStartPos.y;
 
@@ -59,7 +61,13 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
                     NextWord();
                 else if (swipeDistance < -swipeThreshold)  // 下滑
                     PreviousWord();
+
+                isTouchValid = false; // 处理完成后重置标记
             }
+            //else if (touch.phase == TouchPhase.Canceled)
+            //{
+            //    isTouchValid = false; // 触摸取消时重置标记
+            //}
         }
     }
 
@@ -76,10 +84,11 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
         wordList = new List<string>(wordDict.Keys);
         print(wordList.Count);
     }
-    void ShowCurrentWord(object data)
+    public void ShowCurrentWord(object data)
     {
+        //RecorderManager.Instance.StopRecording();
+        //RecorderManager.Instance.StartRecording();
         // 方法 2：使用 as 或 is 检查类型（更安全）
-        
         if (data is int intValueSafe)
         {
             Debug.Log("Safely parsed int value: " + intValueSafe);
@@ -105,7 +114,7 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
     {
         string currentWord = wordList[currentIndex];
         string currentWordMean = wordDict[currentWord];
-
+        Debug.Log("在SpawnWord里当前的CurrentIndex的索引是" + currentIndex);
         Debug.Log("开始进入协程SpawnWord的循环");
         for (int i = 0; i < MaxShowWordCount; i++)
         {
@@ -139,13 +148,13 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
                 RectTransform rectTransform = tmp_WordPrefab.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    rectTransform.anchoredPosition = Vector2.zero;
+                    rectTransform.anchoredPosition =new Vector2(0,150.0f);
                 }
                 yield return new WaitForSeconds(1.0f);
             }
 
             // 处理队列逻辑
-            if (wordQueue.Count > 4)
+            if (wordQueue.Count > 3)
             {
                 Debug.Log("Word queue exceeded 5, despawning oldest word.");
                 PoolManager.Instance.Despawn(wordQueue.Dequeue());
@@ -164,7 +173,7 @@ public class SpawnWordManager : Singleton<SpawnWordManager>
     {
         // 定义网格尺寸
         int gridSizeX = 200;  // 水平方向间距
-        int gridSizeY = 70;  // 垂直方向间距
+        int gridSizeY = 80;  // 垂直方向间距
 
         HashSet<Vector2Int> occupiedCells = new HashSet<Vector2Int>();
 

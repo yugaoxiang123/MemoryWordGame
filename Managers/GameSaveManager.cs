@@ -19,6 +19,55 @@ public class GameSaveManager : Singleton<GameSaveManager>
             return 0;
         }
     }
+    public void SaveCurrentBgm(string _currentBgmPath)
+    {
+        PlayerPrefs.SetString("currentBgm", _currentBgmPath);
+    }
+
+    public float LoadCurrentBgmValue()
+    {
+        if (PlayerPrefs.HasKey("currentBgmValue"))
+        {
+            // 直接从缓存读取
+            return PlayerPrefs.GetFloat("currentBgmValue");
+        }
+        else
+        {
+            return 0.4f;
+        }
+    }
+    public void SaveCurrentBgmValue(float _currentBgmValue)
+    {
+        PlayerPrefs.SetFloat("currentBgmValue", _currentBgmValue);
+    }
+    public float LoadCurrentReadValue()
+    {
+        if (PlayerPrefs.HasKey("currentReadValue"))
+        {
+            // 直接从缓存读取
+            return PlayerPrefs.GetFloat("currentReadValue");
+        }
+        else
+        {
+            return 1.0f;
+        }
+    }
+    public void SaveCurrentReadValue(float _currentReadValue)
+    {
+        PlayerPrefs.SetFloat("currentReadValue", _currentReadValue);
+    }
+    public string LoadCurrentBgm()
+    {
+        if (PlayerPrefs.HasKey("currentBgm"))
+        {
+            // 直接从缓存读取
+            return PlayerPrefs.GetString("currentBgm");
+        }
+        else
+        {
+            return GameConstants.AudioPaths.BGM1;
+        }
+    }
     public string LoadWordsFromJson()
     {
         Debug.Log("进入WordJsonText加载并判断path是否存在");
